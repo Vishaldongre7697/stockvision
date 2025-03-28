@@ -1,0 +1,872 @@
+/* CSS Styles */
+:root {
+    --background: #F5F7FA;
+    --card: #FFFFFF;
+    --text: #222222;
+    --subtext: #666666;
+    --border: #EEEEEE;
+    --primary: #4A80F0;
+    --green: #4CAF50;
+    --red: #F44336;
+    --yellow: #FFC107;
+    --modal-overlay-bg: rgba(0, 0, 0, 0.5);
+    --input-bg: #F5F5F5;
+    --icon-button-bg: #F0F0F0;
+    --icon-button-hover-bg: #ddd;
+    --chart-placeholder-bg: #F5F5F5;
+    --progress-bar-bg: #E0E0E0;
+    --selected-option-bg: rgba(74, 128, 240, 0.1);
+}
+
+[data-theme="dark"] {
+    --background: #121212;
+    --card: #1E1E1E;
+    --text: #FFFFFF;
+    --subtext: #AAAAAA;
+    --border: #333333;
+    --modal-overlay-bg: rgba(0, 0, 0, 0.7);
+    --input-bg: #333;
+    --icon-button-bg: #333;
+    --icon-button-hover-bg: #444;
+    --chart-placeholder-bg: #333;
+    --progress-bar-bg: #333;
+    --selected-option-bg: rgba(74, 128, 240, 0.2);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding-top: 60px; /* Adjusted for fixed header */
+    background-color: var(--background);
+    color: var(--text);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 1200px; /* Optional: Limit max width for larger screens */
+    margin: 0 auto;   /* Optional: Center content */
+}
+
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 60px; /* Fixed height */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--background);
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.header-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.icon-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    background-color: var(--icon-button-bg);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: var(--text); /* Set icon color */
+    font-size: 18px; /* Control icon size */
+}
+.icon-button i {
+    color: var(--text); /* Ensure icon inherits text color */
+    transition: color 0.3s;
+}
+
+.icon-button:hover {
+    background-color: var(--icon-button-hover-bg);
+}
+
+.badge {
+    position: absolute;
+    top: -4px;  /* Adjusted position */
+    right: -6px; /* Adjusted position */
+    background-color: var(--red);
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+.badge.hidden {
+    display: none;
+}
+
+/* Search Bar Styles */
+.search-bar-container {
+    margin: 0 16px;
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: height 0.3s ease-out, opacity 0.3s ease-out, margin-bottom 0.3s ease-out;
+}
+
+.search-bar-container.show {
+    height: 50px;
+    opacity: 1;
+    margin-bottom: 15px;
+    margin-top: 15px; /* Add margin when shown */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    height: 100%;
+    padding: 0 16px;
+    background-color: var(--card);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.search-icon {
+    margin-right: 10px;
+    color: var(--subtext);
+}
+
+.search-input {
+    flex: 1;
+    font-size: 15px;
+    border: none;
+    outline: none;
+    background: none;
+    color: var(--text);
+}
+.search-input::placeholder {
+    color: var(--subtext);
+}
+
+.clear-search-button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.clear-search-button.hidden {
+    display: none;
+}
+.clear-search-button i {
+    color: var(--subtext);
+    font-size: 18px;
+}
+
+/* Scroll Content Styles */
+.scroll-content {
+    padding: 10px 0 30px 0; /* Add top padding */
+}
+
+/* Horizontal Scroll Containers */
+.indices-container, .trending-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px 16px; /* Add padding */
+    /* Improve scroll snapping */
+    scroll-snap-type: x mandatory;
+    /* Hide scrollbar */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.indices-container::-webkit-scrollbar, .trending-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Indices Styles */
+.index-card {
+    border-radius: 16px;
+    padding: 16px;
+    margin-right: 12px;
+    min-width: 170px; /* Use min-width */
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: var(--card);
+    transition: background-color 0.3s, border-color 0.3s;
+    flex-shrink: 0; /* Prevent shrinking */
+    scroll-snap-align: start; /* Snap align */
+}
+.index-card:last-child {
+    margin-right: 0;
+}
+
+.index-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.index-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.index-change {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+.index-change.positive { color: var(--green); }
+.index-change.negative { color: var(--red); }
+
+/* Section Styles */
+.section-container {
+    margin-top: 24px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 16px; /* Add padding */
+}
+
+.section-icon {
+    margin-right: 8px;
+    color: var(--primary);
+    font-size: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text);
+    margin: 0; /* Reset margin */
+}
+
+/* Trending Styles */
+.trending-card {
+    border-radius: 12px;
+    padding: 14px;
+    margin-right: 12px;
+    min-width: 150px; /* Use min-width */
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background-color: var(--card);
+    transition: background-color 0.3s, border-color 0.3s;
+    flex-shrink: 0; /* Prevent shrinking */
+    scroll-snap-align: start; /* Snap align */
+}
+.trending-card:last-child {
+    margin-right: 0;
+}
+
+.trending-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trending-symbol {
+    font-size: 12px;
+    margin-bottom: 6px;
+    color: var(--subtext);
+}
+
+.trending-change {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+.trending-change.positive { color: var(--green); }
+.trending-change.negative { color: var(--red); }
+
+
+.trending-volume {
+    font-size: 12px;
+    color: var(--subtext);
+}
+
+/* Filter Bar Styles */
+.filter-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin: 20px 0;
+}
+
+.filter-buttons-group {
+    display: flex;
+    gap: 8px; /* Add gap between buttons */
+}
+
+.filter-button, .add-button {
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.3s;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+}
+.filter-button:hover, .add-button:hover {
+    background-color: var(--icon-button-hover-bg);
+}
+
+.filter-icon, .add-icon {
+    margin-right: 6px;
+    font-size: 16px;
+}
+
+.add-button {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+.add-button:hover {
+    background-color: #3a70e0; /* Slightly darker primary */
+}
+
+/* Watchlist Styles */
+.watchlist-container {
+    padding: 0 16px;
+}
+
+.stock-card {
+    border-radius: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: var(--card);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.stock-card-clickable-area {
+    cursor: pointer;
+}
+
+
+.stock-card-header {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items top */
+}
+
+.stock-title-row {
+    display: flex;
+    align-items: baseline; /* Align text baselines */
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+.stock-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 6px;
+    color: var(--text);
+}
+
+.stock-symbol {
+    font-size: 12px;
+    color: var(--subtext);
+}
+
+.stock-price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 6px;
+    color: var(--text);
+}
+
+.stock-change {
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+.stock-change.positive { color: var(--green); }
+.stock-change.negative { color: var(--red); }
+
+
+.stock-volume {
+    font-size: 12px;
+    margin-top: 4px;
+    color: var(--subtext);
+}
+
+.stock-right-side {
+    text-align: right; /* Align content to the right */
+    flex-shrink: 0; /* Prevent shrinking */
+    margin-left: 10px; /* Add space */
+}
+
+.signal-badge {
+    padding: 5px 10px; /* Adjusted padding */
+    border-radius: 12px; /* More rounded */
+    color: white;
+    font-weight: bold;
+    font-size: 11px; /* Slightly smaller */
+    display: inline-block; /* Fit content */
+}
+
+.sector-text {
+    font-size: 12px;
+    margin-top: 8px;
+    color: var(--subtext);
+}
+
+.expand-button-container {
+    display: flex; /* Use flex */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    padding-bottom: 8px;
+    color: var(--subtext); /* Icon color */
+    font-size: 20px; /* Icon size */
+}
+/* Add toggle animation for expand icon */
+.expand-button-container i {
+    transition: transform 0.3s ease-in-out;
+}
+.stock-card.expanded .expand-button-container i {
+    transform: rotate(180deg);
+}
+
+
+.expanded-section {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    transition: border-color 0.3s;
+    display: none; /* Hidden by default */
+    /* Add animation for expansion */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out, border-top 0.3s; /* Added border transition */
+}
+.stock-card.expanded .expanded-section {
+    display: block; /* Show when card is expanded */
+    max-height: 1000px; /* Set a large max-height for animation */
+    padding: 16px; /* Ensure padding is applied */
+}
+
+
+.expanded-section-item {
+    margin-bottom: 20px;
+}
+
+.expanded-label {
+    font-size: 13px; /* Smaller label */
+    margin-bottom: 6px; /* Reduced margin */
+    color: var(--subtext);
+    text-transform: uppercase; /* Uppercase label */
+    font-weight: 500;
+}
+
+.progress-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar-container {
+    height: 8px;
+    border-radius: 4px;
+    flex-grow: 1; /* Take remaining space */
+    background-color: var(--progress-bar-bg);
+    overflow: hidden; /* Ensure bar stays within bounds */
+    transition: background-color 0.3s;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    background-color: var(--primary);
+    transition: width 0.5s ease-out, background-color 0.3s; /* Added background-color transition */
+}
+
+.confidence-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.tech-levels-container, .institutional-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px; /* Add gap */
+}
+
+.level-item, .institutional-item {
+    width: 48%; /* Adjust for gap */
+}
+
+.level-value, .activity-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+}
+.activity-value.positive { color: var(--green); }
+.activity-value.negative { color: var(--red); }
+
+.week-range-container {
+    margin-bottom: 20px;
+}
+
+.range-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    gap: 8px;
+}
+.range-value {
+    font-size: 13px;
+    font-weight: 500;
+}
+.range-value.low { color: var(--red); }
+.range-value.high { color: var(--green); }
+
+
+.range-bar {
+    height: 3px; /* Thicker bar */
+    flex: 1;
+    background-color: var(--progress-bar-bg);
+    border-radius: 2px;
+    transition: background-color 0.3s;
+    position: relative; /* Needed for the current price marker */
+}
+
+/* Add a pseudo-element for the current price marker */
+.range-bar::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: var(--current-price-position, 50%); /* Default to 50%, set via JS */
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    border: 1px solid var(--card); /* Optional border */
+    transition: background-color 0.3s, border-color 0.3s; /* Added transition */
+}
+
+.news-container {
+    margin-bottom: 20px;
+}
+
+.news-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border); /* Separator */
+    transition: border-color 0.3s;
+}
+.news-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.news-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    /* Color is applied dynamically via JS now */
+}
+/* Color classes will be applied via JS */
+.news-title.positive { color: var(--green); }
+.news-title.negative { color: var(--red); }
+.news-title.neutral { color: var(--text); }
+
+.news-date {
+    font-size: 12px;
+    color: var(--subtext);
+}
+
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-overlay-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0; /* Start hidden */
+    visibility: hidden; /* Start hidden */
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s; /* Delay visibility change */
+}
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s linear 0s; /* Immediate visibility on show */
+}
+
+
+.modal-content, .add-stock-content, .notifications-content {
+    border-radius: 16px;
+    padding: 20px;
+    width: 90%; /* Responsive width */
+    max-width: 350px; /* Max width for sort/filter */
+    background-color: var(--card);
+    transition: background-color 0.3s, border-color 0.3s;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative; /* For absolute positioned close buttons */
+    transform: scale(0.95); /* Start slightly smaller */
+    transition: transform 0.3s ease, background-color 0.3s, border-color 0.3s;
+}
+.modal-overlay.show .modal-content,
+.modal-overlay.show .add-stock-content,
+.modal-overlay.show .notifications-content {
+    transform: scale(1); /* Scale to normal size when shown */
+}
+
+
+.modal-title, .add-stock-title, .notifications-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 0; /* Remove default margin */
+    margin-bottom: 16px;
+    color: var(--text);
+}
+
+.modal-option {
+    padding: 12px 10px; /* Adjusted padding */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex; /* Use flex for checkmark */
+    align-items: center;
+}
+
+.modal-option:hover {
+    background-color: var(--selected-option-bg);
+}
+
+.modal-option.selected {
+    background-color: var(--selected-option-bg);
+}
+
+.modal-option-text {
+    font-size: 16px;
+    color: var(--text);
+    flex-grow: 1; /* Take available space */
+}
+
+.modal-option.selected .modal-option-text {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.modal-option .checkmark {
+    color: var(--primary);
+    font-weight: bold;
+    margin-right: 8px;
+    visibility: hidden; /* Hide by default */
+}
+.modal-option.selected .checkmark {
+    visibility: visible; /* Show when selected */
+}
+
+
+/* Add Stock & Notifications Modals */
+.add-stock-content, .notifications-content {
+    max-width: 450px; /* Wider modals */
+}
+
+.add-stock-header, .notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.3s;
+}
+
+.close-modal-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--subtext);
+    padding: 5px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.close-modal-button:hover {
+    color: var(--text);
+}
+
+.add-stock-form {
+    margin-top: 8px;
+}
+
+.input-group {
+    margin-bottom: 16px;
+}
+
+.input-label {
+    display: block; /* Ensure label is on its own line */
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.input {
+    width: 100%; /* Full width */
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    background-color: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    box-sizing: border-box; /* Include padding and border in width */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(74, 128, 240, 0.2);
+}
+
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Space between buttons */
+    margin-top: 24px;
+}
+
+.cancel-button, .confirm-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s; /* Added color */
+}
+
+.cancel-button {
+    background-color: var(--card);
+    color: var(--text);
+}
+.cancel-button:hover {
+    background-color: var(--icon-button-hover-bg);
+}
+
+
+.confirm-button {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+.confirm-button:hover {
+    background-color: #3a70e0;
+    border-color: #3a70e0;
+}
+
+/* Notifications Modal Specifics */
+.notifications-content {
+    max-height: 70vh; /* Limit height */
+    display: flex;
+    flex-direction: column;
+}
+
+.clear-button {
+    padding: 5px 12px;
+    border-radius: 20px;
+    background-color: var(--selected-option-bg);
+    color: var(--primary);
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px; /* Space from title */
+    transition: background-color 0.2s;
+}
+.clear-button:hover {
+    background-color: rgba(74, 128, 240, 0.3);
+}
+
+
+.notifications-list {
+    flex-grow: 1; /* Take remaining height */
+    overflow-y: auto; /* Enable scrolling */
+    padding-right: 5px; /* Space for scrollbar */
+}
+
+.notification-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.3s;
+}
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+
+.notification-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+
+.notification-message {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: var(--subtext);
+}
+
+.notification-time {
+    font-size: 12px;
+    color: var(--subtext);
+}
+
+/* Loading Placeholder Style */
+.loading-placeholder {
+    color: var(--subtext);
+    font-style: italic;
+    padding: 16px;
+    text-align: center;
+}

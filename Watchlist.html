@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Essential for special characters/emojis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Watchlist</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="light"> <!-- Start with light theme -->
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="header-title">📈 Market Watchlist</h1>
+            <div class="header-buttons">
+                <button class="icon-button" id="theme-toggle-button" onclick="toggleTheme()">
+                    <i id="theme-icon" class="fa-regular fa-moon"></i> <!-- Start with moon icon -->
+                </button>
+                <div style="position: relative;">
+                    <button class="icon-button" id="notification-button" onclick="handleNotificationBell()">
+                        <i id="notification-icon" class="fa-regular fa-bell"></i>
+                    </button>
+                    <span id="notification-badge" class="badge hidden"></span> <!-- Initially hidden -->
+                </div>
+                <button class="icon-button" id="search-toggle-button" onclick="toggleSearch()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div id="search-bar-container" class="search-bar-container">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" class="search-input" placeholder="Search stocks by name or symbol..." oninput="handleSearch(this.value)">
+                <button onclick="clearSearch()" class="clear-search-button hidden" id="clear-search-button">
+                  <i class="fa-solid fa-circle-xmark search-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="scroll-content">
+            <!-- Market Indices -->
+            <div class="indices-container" id="indices-container">
+                <!-- Indices will be rendered here by JS -->
+                <p class="loading-placeholder">Loading indices...</p>
+            </div>
+
+            <!-- Trending Stocks -->
+            <div class="section-container">
+                <div class="section-header">
+                    <i class="fa-solid fa-arrow-trend-up section-icon"></i>
+                    <h2 class="section-title">🔥 Trending Now</h2>
+                </div>
+                <div class="trending-container" id="trending-container">
+                    <!-- Trending stocks will be rendered here by JS -->
+                    <p class="loading-placeholder">Loading trending stocks...</p>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar-container">
+                <div class="filter-buttons-group">
+                    <button class="filter-button" onclick="showModal('filter-modal')">
+                        <i class="fa-solid fa-filter filter-icon"></i>
+                        <span class="filter-button-text">Filter</span>
+                    </button>
+                    <button class="filter-button" onclick="showModal('sort-modal')">
+                        <i class="fa-solid fa-sort filter-icon"></i>
+                        <span class="filter-button-text">Sort</span>
+                    </button>
+                </div>
+                <button class="add-button" onclick="showModal('add-stock-modal')">
+                    <i class="fa-solid fa-plus add-icon"></i>
+                    Add Stock
+                </button>
+            </div>
+
+            <!-- Watchlist -->
+            <div class="watchlist-container" id="watchlist-container">
+                <!-- Watchlist stocks will be rendered here by JS -->
+                 <p class="loading-placeholder">Loading watchlist...</p>
+            </div>
+        </div>
+
+        <!-- Sort Modal -->
+        <div id="sort-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'sort-modal')">
+            <div class="modal-content">
+                <h2 class="modal-title">Sort By</h2>
+                <div id="sort-options-container">
+                    <!-- Sort options will be rendered here by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Modal -->
+        <div id="filter-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'filter-modal')">
+            <div class="modal-content">
+                <h2 class="modal-title">Filter</h2>
+                <div id="filter-options-container">
+                    <!-- Filter options will be rendered here by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Stock Modal -->
+        <div id="add-stock-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'add-stock-modal')">
+            <div class="add-stock-content">
+                <div class="add-stock-header">
+                    <h2 class="add-stock-title">📌 Add New Stock</h2>
+                    <button onclick="hideModal('add-stock-modal')" class="close-modal-button">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="add-stock-form">
+                    <div class="input-group">
+                        <label class="input-label" for="stock-symbol-input">Stock Symbol</label>
+                        <input type="text" class="input" id="stock-symbol-input" placeholder="e.g., RELIANCE.NS">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" for="company-name-input">Company Name</label>
+                        <input type="text" class="input" id="company-name-input" placeholder="e.g., Reliance Industries">
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="cancel-button" onclick="hideModal('add-stock-modal')">Cancel</button>
+                        <button class="confirm-button" onclick="addStock()">Add Stock</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Modal -->
+        <div id="notifications-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'notifications-modal')">
+            <div class="notifications-content">
+                <div class="notifications-header">
+                    <h2 class="notifications-title">🔔 Notifications</h2>
+                    <button class="clear-button" onclick="clearNotifications()">Mark all as read</button>
+                     <button onclick="hideModal('notifications-modal')" class="close-modal-button" style="margin-left: auto;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="notifications-list" id="notifications-list">
+                    <!-- Notifications will be rendered here by JS -->
+                     <p class="loading-placeholder">Loading notifications...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Link to your external JavaScript file -->
+    <script src="script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages-container">
+            <!-- Initial Greeting -->
+            <div class="greeting" id="greeting">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face right"></div>
+                        <div class="face left"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                </div>
+                <h1 id="typing-text">Hey, how can I help?</h1>
+            </div>
+            
+            <div class="suggestions" id="suggestions">
+                <button class="suggestion-btn" data-message="What are the best stocks to buy today?">
+                    <span class="icon">💬</span>
+                    <span>What are the best stocks to buy today?</span>
+                    <span class="chevron">›</span>
+                </button>
+                <button class="suggestion-btn" data-message="Show me AI predictions for Nifty 50">
+                    <span class="icon">💬</span>
+                    <span>Show me AI predictions for Nifty 50</span>
+                    <span class="chevron">›</span>
+                </button>
+            </div>
+
+            <!-- Messages will be appended here -->
+            <div class="messages" id="messages"></div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Message to Suhu...">
+            <button class="mic-btn" aria-label="Voice input">
+                <span>🎤</span>
+            </button>
+            <button class="send-btn" aria-label="Send message">
+                <span>➤</span>
+            </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Stock Prediction Dashboard</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="main-container" id="app">
+
+    <!-- Stock Selector Section -->
+    <section class="stock-selector-section">
+         <h2 class="stock-selector-label">Predicted Stocks</h2>
+         <div class="stock-selector-container" id="stock-selector">
+             <!-- Stock buttons will be generated here by JS -->
+         </div>
+    </section>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="symbol-container">
+            <span class="symbol" id="stock-symbol"></span>
+            <p class="company-name" id="stock-name"></p>
+        </div>
+        <div class="price-container">
+            <span class="price" id="stock-price"></span>
+            <div class="change-container">
+                <i id="change-icon" class="fas"></i>
+                <span class="change" id="stock-change"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- AI Price Prediction Section -->
+    <section class="section ai-prediction">
+        <h2 class="section-title">AI Price Prediction</h2>
+        <div class="chart-view">
+            <div class="chart-header">
+                <span class="chart-title">Price Chart</span>
+                <div class="chart-type-buttons">
+                    <button id="candle-chart-btn" class="chart-type-button active">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </button>
+                    <button id="line-chart-btn" class="chart-type-button">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <div class="chart-container" id="candle-chart-container">
+                    <svg id="candle-chart-svg" width="100%" height="100%" viewBox="0 0 311 220" preserveAspectRatio="none"></svg>
+                    <div id="candle-chart-labels"></div>
+                </div>
+                <div class="chart-container" id="line-chart-container">
+                     <svg id="line-chart-svg" width="100%" height="100%" viewBox="0 0 311 220" preserveAspectRatio="none">
+                       <defs>
+                         <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                           <stop offset="0" stop-color="#2196F3" stop-opacity="0.3" />
+                           <stop offset="1" stop-color="#2196F3" stop-opacity="0.0" />
+                         </linearGradient>
+                       </defs>
+                    </svg>
+                     <div id="line-chart-labels"></div>
+                </div>
+            </div>
+            <div class="chart-legend" id="chart-legend"></div>
+            <div class="timeframe-container">
+                <button class="timeframe-button active">1D</button>
+                <button class="timeframe-button">1W</button>
+                <button class="timeframe-button">1M</button>
+                <button class="timeframe-button">3M</button>
+                <button class="timeframe-button">1Y</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prediction Metrics Section -->
+    <section class="section prediction-metrics">
+        <h2 class="section-title">Prediction Metrics</h2>
+        <div class="metrics-container">
+            <div class="metrics-row">
+                <div class="confidence-meter">
+                    <span class="confidence-title">AI Confidence</span>
+                    <div class="confidence-indicator">
+                        <div class="confidence-bg"><div id="confidence-fill" class="confidence-fill"></div></div>
+                        <div class="confidence-value"><span id="confidence-text" class="confidence-text"></span></div>
+                    </div>
+                    <div class="confidence-labels"><span class="confidence-min">Low</span><span class="confidence-max">High</span></div>
+                </div>
+                 <div class="direction-indicator-wrapper">
+                     <span class="direction-title">Prediction</span>
+                     <div class="direction-indicator">
+                         <div id="direction-badge" class="direction-badge"><i id="direction-icon" class="fas"></i><span id="direction-text" class="direction-text"></span></div>
+                         <span id="direction-timeframe" class="direction-timeframe"></span>
+                     </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="price-range-section">
+                <span class="price-range-title">Predicted Price Range</span>
+                <div class="price-range-container">
+                    <div class="price-range-values">
+                        <div class="price-point"><span class="price-label">Min</span><span class="price-value" id="price-range-min"></span></div>
+                        <div class="price-point"><span class="price-label">Max</span><span class="price-value" id="price-range-max"></span></div>
+                    </div>
+                    <div class="range-bar-container">
+                        <div class="range-bar"><div class="range-bar-fill"></div></div>
+                        <div class="range-markers"><div class="range-marker range-marker-min"></div><div class="range-marker range-marker-max"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-section">
+                <div class="strategy-container"><i class="fas fa-bolt strategy-icon"></i><span class="strategy-text"><span class="strategy-label">Recommended Strategy: </span><span id="strategy-value" class="strategy-value"></span></span></div>
+                <div class="update-container"><i class="fas fa-history update-icon"></i><span id="update-text" class="update-text"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Indicators Section -->
+    <section class="section technical-indicators">
+        <h2 class="section-title">Technical Indicators</h2>
+        <div class="indicator-grid" id="indicator-grid"></div>
+    </section>
+
+    <!-- Fundamental Data Section -->
+    <section class="section fundamental-data">
+        <h2 class="section-title">Fundamental Data</h2>
+        <div class="fundamental-grid" id="fundamental-grid"></div>
+    </section>
+
+    <!-- Trade Management Tools Section -->
+    <section class="section trade-management">
+        <h2 class="section-title trade-title">Trade Management</h2>
+         <div class="trade-management-tools">
+            <span class="trade-title">Trade Calculator</span>
+            <div class="parameters">
+                <div class="parameter-row">
+                    <div class="parameter-item"><label class="param-label" for="quantity">Quantity</label><div class="input-container"><input id="quantity" class="input" type="number" value="10" placeholder="Qty"/></div></div>
+                    <div class="parameter-item"><label class="param-label" for="entry-price">Entry Price</label><div class="input-container"><span class="input-prefix">₹</span><input id="entry-price" class="input" type="number" step="0.01" value="" placeholder="0.00"/></div></div>
+                </div>
+                <div class="parameter-row">
+                    <div class="parameter-item"><label class="param-label" for="target-price">Target Price</label><div class="input-container"><span class="input-prefix">₹</span><input id="target-price" class="input" type="number" step="0.01" value="" placeholder="0.00"/></div></div>
+                    <div class="parameter-item"><label class="param-label" for="stop-loss-price">Stop Loss</label><div class="input-container"><span class="input-prefix">₹</span><input id="stop-loss-price" class="input" type="number" step="0.01" value="" placeholder="0.00"/></div></div>
+                </div>
+            </div>
+            <div class="results-container">
+                <span class="results-title">Potential Returns</span>
+                <div class="results-card">
+                    <div class="result-row">
+                        <div class="result-item"><span class="result-label">Potential Profit</span><span class="result-value profit-text" id="potential-profit">₹0.00</span></div>
+                        <div class="result-item"><span class="result-label">Potential Loss</span><span class="result-value loss-text" id="potential-loss">₹0.00</span></div>
+                    </div>
+                    <div class="result-row">
+                        <div class="result-item"><span class="result-label">Risk:Reward Ratio</span><span class="result-value" id="risk-reward-ratio">N/A</span></div>
+                        <div class="result-item"><span class="result-label">Recommended Size</span><span class="result-value">2% of capital</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button id="set-alert-btn" class="action-button alert-button"><i class="fas fa-bell"></i><span>Set Price Alert</span></button>
+                <button id="place-order-btn" class="action-button order-button"><i class="fas fa-arrow-trend-up"></i><span>Place Order</span></button>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Link to External JavaScript - Place just before closing </body> -->
+<script src="script.js"></script>
+
+</body>
+</html>
